@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+  ruby:
+    build:
+      context: .
+      dockerfile: jornada-ecoruby/Dockerfile
+    # image: ruby:latest
+    ports:
+      - 5020:80
+    container_name: ruby
+    volumes:
+      - ./jornada-ecoruby/ruby:/outside
+    # environment: 
+    #   APACHE_RUN_DIR: ${ARD}
+    #   APACHE_PID_FILE: ${PID}
+    #   APACHE_RUN_USER: ${USR}
+    #   APACHE_RUN_GROUP: ${GRP}
+    #   APACHE_LOG_DIR: ${LOG}
+    env_file:
+      - .env
+  pg:
+    build:
+      context: .
+      dockerfile: pg/Dockerfile
+    # image: postgres:latest
+    ports:
+      - 5432:5432
+    container_name: pg
+    volumes:
+    #   - drupal_test4_dbdata:/var/lib/mysql
+      - ./pg/db-backups:/outside
+    environment: 
+      POSTGRES_HOST_AUTH_METHOD: ${PG_AUTH}
+    #   POSTGRE_PASSWORD: ${PG_PASS}
+    env_file:
+      - .env
+
